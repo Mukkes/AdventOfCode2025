@@ -6,16 +6,10 @@
 int main() {
     FILE *filePointer;
     filePointer = fopen("Input.txt", "r");
-    char line[5];
+    char line[6];
     int index = 0;
-    //Rotation rotations[110];
-    Rotation *rotations = (Rotation *) malloc(4327 * sizeof(*rotations));
-    if (rotations == NULL)
-    {
-        fprintf(stderr, "Memory allocation failed\n");
-        return 1;
-    }
-    //Rotation rotations[4317];
+    int size = 4317;
+    Rotation *rotations = (Rotation *) malloc(size * sizeof(*rotations));
     if (filePointer != NULL) {
         while (fgets(line, sizeof(line), filePointer)) {
             rotations[index].Direction = line[0];
@@ -28,18 +22,25 @@ int main() {
     }
     fclose(filePointer);
 
-    printf("%c", rotations[0].Direction);
-    printf("%d", rotations[0].Distance);
-    //int resultPart1 = 0;
-    //for (int i = 0; i < 1000; i++) {
-    //    resultPart1 += GetRequiredWarppingPaper(&boxes[i]);
-    //}
-    //printf("Part1: %d\n", resultPart1);
-    //int resultPart2 = 0;
-    //for (int i = 0; i < 1000; i++) {
-    //    resultPart2 += GetRibbon(&boxes[i]);
-    //}
-    //printf("Part2: %d\n", resultPart2);
+    int dial = 50;
+    int count = 0;
+    for (int i = 0; i < size; i++)
+    {
+        if (rotations[i].Direction == 'R')
+        {
+            dial = dial + rotations[i].Distance;
+        }
+        else
+        {
+            dial = dial - rotations[i].Distance;
+        }
+        if (dial % 100 == 0)
+        {
+            count++;
+        }
+    }
+    printf("Part1: %d\n", count);
+
     free(rotations);
     return 0;
 }
