@@ -9,7 +9,7 @@ int main() {
     char line[6];
     int index = 0;
     int size = 4317;
-    Rotation *rotations = (Rotation *) malloc(size * sizeof(*rotations));
+    Rotation *rotations = (Rotation *) malloc(size * sizeof(Rotation));
     if (filePointer != NULL) {
         while (fgets(line, sizeof(line), filePointer)) {
             rotations[index].Direction = line[0];
@@ -23,23 +23,47 @@ int main() {
     fclose(filePointer);
 
     int dial = 50;
-    int count = 0;
+    int resultPart1 = 0;
+    int resultPart2 = 0;
     for (int i = 0; i < size; i++)
     {
+        int hundred = rotations[i].Distance / 100;
+        resultPart2 += hundred;
+        int distance = rotations[i].Distance - (hundred * 100);
         if (rotations[i].Direction == 'R')
         {
-            dial = dial + rotations[i].Distance;
+            dial += distance;
+            if (dial > 99)
+            {
+                dial -= 100;
+                resultPart2++;
+            }
+            if (dial == 0)
+            {
+                resultPart1++;
+            }
         }
         else
         {
-            dial = dial - rotations[i].Distance;
-        }
-        if (dial % 100 == 0)
-        {
-            count++;
+            if (dial == 0 && distance > 0)
+            {
+                dial += 100;
+            }
+            dial -= distance;
+            if (dial < 0)
+            {
+                dial += 100;
+                resultPart2++;
+            }
+            if (dial == 0)
+            {
+                resultPart1++;
+                resultPart2++;
+            }
         }
     }
-    printf("Part1: %d\n", count);
+    printf("Part1: %d\n", resultPart1);
+    printf("Part2: %d\n", resultPart2);
 
     free(rotations);
     return 0;
