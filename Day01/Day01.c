@@ -3,12 +3,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-void GetRotations(Rotation *rotations, int size);
+void GetRotations(Rotation *rotations);
 
-int main() {
+int main()
+{
     int size = 4317;
-    Rotation *rotations = (Rotation *) malloc(size * sizeof(Rotation));
-    GetRotations(rotations, size);
+    Rotation *rotations = (Rotation *)malloc(size * sizeof(Rotation));
+    GetRotations(rotations);
 
     int dial = 50;
     int resultPart1 = 0;
@@ -57,14 +58,16 @@ int main() {
     return 0;
 }
 
-void GetRotations(Rotation *rotations, int size)
+void GetRotations(Rotation *rotations)
 {
     FILE *filePointer;
     filePointer = fopen("Input.txt", "r");
     char line[6];
     int index = 0;
-    if (filePointer != NULL) {
-        while (fgets(line, sizeof(line), filePointer)) {
+    if (filePointer != NULL)
+    {
+        while (fgets(line, sizeof(line), filePointer))
+        {
             rotations[index].Direction = line[0];
             char distance[4];
             distance[3] = '\0';
