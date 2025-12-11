@@ -4,7 +4,8 @@
 #include <string.h>
 
 void GetRanges(ProductIdRange *productIdRanges);
-bool IsInvalidId(long long id);
+bool IsInvalidId1(long long id);
+bool IsInvalidId2(long long id);
 
 int main()
 {
@@ -18,10 +19,14 @@ int main()
     {
         for (long long id = productIdRanges[i].FirstId; id <= productIdRanges[i].LastId; id++)
         {
-            if (IsInvalidId(id))
+            if (IsInvalidId1(id))
             {
                 resultPart1 += id;
-                // printf("id: %lld\n", id);
+                resultPart2 += id;
+            }
+            else if (IsInvalidId2(id))
+            {
+                resultPart2 += id;
             }
         }
     }
@@ -56,7 +61,7 @@ void GetRanges(ProductIdRange *productIdRanges)
     fclose(filePointer);
 }
 
-bool IsInvalidId(long long id)
+bool IsInvalidId1(long long id)
 {
     char charId[11];
     sprintf(charId, "%lld", id);
@@ -72,11 +77,48 @@ bool IsInvalidId(long long id)
     last[half] = '\0';
     strncpy(first, charId, half);
     strncpy(last, charId + half, half);
-    // printf("first: %s\n", first);
-    // printf("last: %s\n", last);
     if (strcmp(first, last) == 0)
     {
         return true;
+    }
+    return false;
+}
+
+bool IsInvalidId2(long long id)
+{
+    char charId[11];
+    sprintf(charId, "%lld", id);
+    int length = strlen(charId);
+    int mod = 2;
+    bool result = true;
+    while (mod <= length)
+    {
+        if (length % mod == 0)
+        {
+            result = true;
+            int size = length / mod;
+            char part1[size + 1];
+            char part2[size + 1];
+            part1[size] = '\0';
+            part2[size] = '\0';
+            int part = 0;
+            while (part < (mod - 1))
+            {
+                strncpy(part1, charId + (size * part), size);
+                strncpy(part2, charId + size + (size * part), size);
+                if (strcmp(part1, part2) != 0)
+                {
+                    result = false;
+                    break;
+                }
+                part++;
+            }
+            if (result)
+            {
+                return true;
+            }
+        }
+        mod++;
     }
     return false;
 }
