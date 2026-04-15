@@ -33,8 +33,6 @@ int main()
     {
         return 1;
     }
-    printf("rows: %zu\n", grid->Rows);
-    printf("columns: %zu\n", grid->Columns);
 
     rewind(filePointer);
     size_t column = 0;
@@ -55,52 +53,62 @@ int main()
 
     fclose(filePointer);
 
-    size_t accessableRolls = 0;
-    for (row = 0; row < grid->Rows; row++)
+    size_t totalRemovedRolls = 0;
+    bool printPartOne = true;
+    while (true)
     {
-        for (column = 0; column < grid->Columns; column++)
+        size_t accessableRolls = 0;
+        for (row = 0; row < grid->Rows; row++)
         {
-            if (GetFromGrid(grid, column, row) != '@')
+            for (column = 0; column < grid->Columns; column++)
             {
-                continue;
-            }
-
-            char adjacentPositions[8] = {0};
-            size_t rollsOfPaper = 0;
-            GetAdjacentPositions(grid, column, row, adjacentPositions);
-            for (size_t i = 0; i < 8; i++)
-            {
-                if ((adjacentPositions[i] == '@') ||
-                    (adjacentPositions[i] == 'X'))
+                if (GetFromGrid(grid, column, row) != '@')
                 {
-                    rollsOfPaper++;
+                    continue;
+                }
+
+                char adjacentPositions[8] = {0};
+                size_t rollsOfPaper = 0;
+                GetAdjacentPositions(grid, column, row, adjacentPositions);
+                for (size_t i = 0; i < 8; i++)
+                {
+                    if ((adjacentPositions[i] == '@') ||
+                        (adjacentPositions[i] == 'X'))
+                    {
+                        rollsOfPaper++;
+                    }
+                }
+                if (rollsOfPaper < 4)
+                {
+                    InsertIntoGrid(grid, column, row, 'X');
+                    accessableRolls++;
                 }
             }
-            if (rollsOfPaper < 4)
-            {
-                InsertIntoGrid(grid, column, row, 'X');
-                accessableRolls++;
-            }
-            for (size_t i = 0; i < 8; i++)
-            {
-                printf("%c", adjacentPositions[i]);
-            }
-            printf("\tRolls of paper[%zu,%zu]: %zu\n", column, row,
-                   rollsOfPaper);
         }
-    }
-
-    for (row = 0; row < grid->Rows; row++)
-    {
-        for (column = 0; column < grid->Columns; column++)
+        if (printPartOne)
         {
-            printf("%c", GetFromGrid(grid, column, row));
+            printf("Part1: %zu\n", accessableRolls);
+            printPartOne = false;
         }
-        printf("\n");
+        if (accessableRolls > 0)
+        {
+            totalRemovedRolls += accessableRolls;
+        }
+        else
+        {
+            break;
+        }
+
+        for (size_t i = 0; i < grid->GridSize; i++)
+        {
+            if (grid->Grid[i] == 'X')
+            {
+                grid->Grid[i] = '.';
+            }
+        }
     }
 
-    printf("\n");
-    printf("Part1: %zu\n", accessableRolls);
+    printf("Part2: %zu\n", totalRemovedRolls);
     DeleteGrid(&grid);
     return 0;
 }
