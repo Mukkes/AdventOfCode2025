@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall
-objects = Day04.o ../Util/InputUtil.o ../Util/GridUtil.o
+objects = Day04.o Grid.o
 
 all: Day04
 
