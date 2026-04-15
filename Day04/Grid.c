@@ -33,11 +33,11 @@ void InsertIntoGrid(Grid *grid, size_t column, size_t row, char ch)
 {
     if ((column < 0) || (column >= grid->Columns))
     {
-        exit(0);
+        exit(1);
     }
     if ((row < 0) || (row >= grid->Rows))
     {
-        exit(0);
+        exit(1);
     }
     size_t index = (row * grid->Columns) + column;
     grid->Grid[index] = ch;
@@ -47,11 +47,11 @@ char GetFromGrid(Grid *grid, size_t column, size_t row)
 {
     if ((column < 0) || (column >= grid->Columns))
     {
-        exit(0);
+        exit(1);
     }
     if ((row < 0) || (row >= grid->Rows))
     {
-        exit(0);
+        exit(1);
     }
     size_t index = (row * grid->Columns) + column;
     return grid->Grid[index];
